@@ -36,7 +36,7 @@ from pymobiledevice3.osu.os_utils import get_os_utils
 from pymobiledevice3.bonjour import DEFAULT_BONJOUR_TIMEOUT, browse_mobdev2
 from pymobiledevice3.pair_records import get_local_pairing_record, get_remote_pairing_record_filename, get_preferred_pair_record
 from pymobiledevice3.common import get_home_folder
-from pymobiledevice3.cli.remote import cli_install_wetest_drivers
+#from pymobiledevice3.cli.remote import cli_install_wetest_drivers
 
 from pymobiledevice3.cli.remote import tunnel_task
 from pymobiledevice3.lockdown import LockdownClient
@@ -704,23 +704,23 @@ def connect_usb(data):
 
             logger.info(f"iOS Version: {ios_version}")
             if version_check(ios_version):
-                if sys.platform == 'win32':
-                    logger.warning("iOS is between 17.0 and 17.3.1, WHY?")
-                    logger.warning("You should upgrade to 17.4+")
-                    logger.error("We need to install a 3rd party driver for these versions")
-                    logger.error("which may stop working at any time")
-                    try:
-                        devices = get_devices_with_retry()
-                        logger.info(f"Devices: {devices}")
-                        rsd = [device for device in devices if device.udid == udid]
-                        if len(rsd) > 0:
-                            rsd = rsd[0]
-                        start_tunnel_thread(rsd)
+                # if sys.platform == 'win32':
+                #     logger.warning("iOS is between 17.0 and 17.3.1, WHY?")
+                #     logger.warning("You should upgrade to 17.4+")
+                #     logger.error("We need to install a 3rd party driver for these versions")
+                #     logger.error("which may stop working at any time")
+                try:
+                    devices = get_devices_with_retry()
+                    logger.info(f"Devices: {devices}")
+                    rsd = [device for device in devices if device.udid == udid]
+                    if len(rsd) > 0:
+                        rsd = rsd[0]
+                    start_tunnel_thread(rsd)
 
-                    except RuntimeError as e:
-                        error_message = str(e)
-                        logger.error(f"Error: {error_message}")
-                        return jsonify({'error': 'No Devices Found'})
+                except RuntimeError as e:
+                    error_message = str(e)
+                    logger.error(f"Error: {error_message}")
+                    return jsonify({'error': 'No Devices Found'})
                 else:
                     logger.warning("ios <17.4 on non-windows")
                     try:
