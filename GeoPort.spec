@@ -11,10 +11,15 @@ readchar_hidden_imports = collect_submodules('readchar')
 inquirer_hidden_imports = collect_submodules('inquirer')
 ipython_hidden_imports = collect_submodules('IPython')
 pymobiledevice3_hidden_imports = collect_submodules('pymobiledevice3')
+pyimg4_hidden_imports = collect_submodules('pyimg4')
+ipsw_parser_hidden_imports = collect_submodules('ipsw_parser')
+
 readchar_datas = collect_data_files('readchar')
 inquirer_datas = collect_data_files('inquirer')
 pymobiledevice3_datas = collect_data_files('pymobiledevice3')
 ipython_datas = collect_data_files('IPython')
+pyimg4_datas = collect_data_files('pyimg4')
+ipsw_parser_datas = collect_data_files('ipsw_parser')
 
 a = Analysis(
     ['src/main.py'],
@@ -27,7 +32,9 @@ a = Analysis(
         ('D:\\geoport-4.0.2\\GeoPort\\venv\\lib\\site-packages\\readchar-4.2.1.dist-info', 'readchar-4.2.1.dist-info'),
         ('D:\\geoport-4.0.2\\GeoPort\\venv\\lib\\site-packages\\inquirer3-0.6.1.dist-info', 'inquirer3-0.6.1.dist-info'),
         ('D:\\geoport-4.0.2\\GeoPort\\venv\\lib\\site-packages\\pymobiledevice3-4.17.2.dist-info', 'pymobiledevice3-4.17.2.dist-info'),
-    ] + readchar_datas + inquirer_datas + pymobiledevice3_datas + ipython_datas,
+        ('D:\\geoport-4.0.2\\GeoPort\\venv\\lib\\site-packages\\pyimg4-0.8.6.dist-info', 'pyimg4-0.8.6.dist-info'),
+        ('D:\\geoport-4.0.2\\GeoPort\\venv\\lib\\site-packages\\ipsw_parser-1.1.0.dist-info', 'ipsw_parser-1.1.0.dist-info'),
+    ] + readchar_datas + inquirer_datas + pymobiledevice3_datas + ipython_datas + pyimg4_datas + ipsw_parser_datas,
     hiddenimports=[
         'engineio.async_drivers.threading',
         'flask',
@@ -41,6 +48,8 @@ a = Analysis(
         'pymobiledevice3.services.dvt.instruments.location_simulation',
         'pymobiledevice3.lockdown_service_provider',
         'pymobiledevice3.service_connection',
+        'pymobiledevice3.services.mobile_image_mounter',
+        'pymobiledevice3.restore.tss',
         'readchar.readchar',
         'readchar.readkey',
         'inquirer3',
@@ -51,11 +60,14 @@ a = Analysis(
         'IPython.core',
         'IPython.utils',
         'IPython.terminal',
+        'pyimg4',
+        'ipsw_parser',
+        'ipsw_parser.img4',
     ],
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
-    excludes=['tkinter', 'Tkinter', 'PIL', 'notebook', 'matplotlib'],  # 移除了 IPython
+    excludes=['tkinter', 'Tkinter', 'PIL', 'notebook', 'matplotlib'],
     win_no_prefer_redirects=False,
     win_private_assemblies=False,
     cipher=block_cipher,
@@ -67,6 +79,8 @@ a.hiddenimports.extend(readchar_hidden_imports)
 a.hiddenimports.extend(inquirer_hidden_imports)
 a.hiddenimports.extend(ipython_hidden_imports)
 a.hiddenimports.extend(pymobiledevice3_hidden_imports)
+a.hiddenimports.extend(pyimg4_hidden_imports)
+a.hiddenimports.extend(ipsw_parser_hidden_imports)
 
 pyz = PYZ(a.pure, a.zipped_data, cipher=block_cipher)
 
