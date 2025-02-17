@@ -90,7 +90,7 @@ exe = EXE(
     a.scripts,
     [],
     exclude_binaries=True,
-    name='GeoPort',
+    name='Fake_Location_google_V2.17',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
@@ -111,5 +111,5 @@ coll = COLLECT(
     strip=False,
     upx=False,
     upx_exclude=[],
-    name='GeoPort'
+    name='Fake_Location_google_V2.17'
 )
