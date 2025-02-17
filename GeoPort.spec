@@ -27,6 +27,7 @@ a = Analysis(
     binaries=[],
     datas=[
         ('src/templates', 'templates'),
+        ('src/static', 'static'),  # 添加静态文件目录
         ('images', 'images'),
         ('D:\\geoport-4.0.2\\GeoPort\\venv\\lib\\site-packages\\pytun_pmd3\\wintun\\bin\\amd64\\wintun.dll', 'pytun_pmd3/wintun/bin/amd64'),
         ('D:\\geoport-4.0.2\\GeoPort\\venv\\lib\\site-packages\\readchar-4.2.1.dist-info', 'readchar-4.2.1.dist-info'),
