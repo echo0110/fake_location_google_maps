@@ -91,6 +91,13 @@ You will need to install iTunes (we need their USB service so we can discover th
 - Administrator / Sudo permissions are required for iOS17
 - If you forget to reset your location when you disconnect, Don't worry! Simply connect your device again and "Stop Location"
 
+### Remote connections over Tailscale
+- Install Tailscale on both Windows and your iOS 17+ device and confirm they can ping each other.
+- Start GeoPort with the new CLI flags so the app uses the Tailscale IP directly:
+  - `--tailscale-host <TAILSCALE_IP>`
+  - `--tailscale-port <PORT>` (optional, defaults to 62078)
+- The app will treat the connection type as **Tailscale** and tunnel location updates over that secure link.
+
 ## Tech Stuff and recognition
 GeoPort is built with python, flask and pymobiledevice3
 Interface inspired by the popular iFakeLocation, GeoPort is built for familiarity with the addition of iOS17 and Windows support (Windows release imminent)

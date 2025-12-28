@@ -49,6 +49,9 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--no-browser', action='store_true', help='Skip auto opening the browser')
 parser.add_argument('--port', type=int, help='Specify port number to listen on for web browser requests')
 parser.add_argument('--wifihost', type=str, help='Specify the wifi IP address to connect to')
+parser.add_argument('--wifihost-port', type=int, default=62078, help='Specify the wifi lockdown port to use (default: 62078)')
+parser.add_argument('--tailscale-host', type=str, help='Optional Tailscale IP/hostname to connect to the device')
+parser.add_argument('--tailscale-port', type=int, default=62078, help='Lockdown port when using --tailscale-host (default: 62078)')
 parser.add_argument('--udid', type=str, help='Specify the device udid to target')
 args = parser.parse_args()
 #========= Arg Parser ========
@@ -92,8 +95,9 @@ rsd_host = None
 rsd_port = None
 rsd_data_map = {}
 wifi_address = None
-wifihost = args.wifihost
-wifi_port = None
+wifihost = args.tailscale_host or args.wifihost
+wifi_port = args.tailscale_port if args.tailscale_host else args.wifihost_port
+tailscale_mode = args.tailscale_host is not None
 connection_type = None
 udid = None
 lockdown = None
@@ -800,7 +804,10 @@ def connect_wifi(data):
         if ios_version is not None and is_major_version_17_or_greater(ios_version):
             logger.info("iOS 17+ detected")
 
-            if version_check(ios_version):
+            if wifihost:
+                wifi_address = wifihost
+                logger.info(f"Using manual host for remote pairing: {wifi_address}:{wifi_port}")
+            elif version_check(ios_version):
                 try:
                     devices = get_wifi_with_retry()
                     #devices = "blah"
@@ -1190,9 +1197,9 @@ def py_list_devices():
 
         if wifihost:
             udid = args.udid
-            logger.warning(f"Wifi requested to {wifihost}")
+            logger.warning(f"Wifi requested to {wifihost}:{wifi_port}")
             logger.warning(f"udid: {udid}")
-            lockdown = create_using_tcp(hostname=wifihost, identifier=udid)
+            lockdown = create_using_tcp(hostname=wifihost, port=wifi_port, identifier=udid)
 
             # udid = lockdown.udid
             # print("wifi udid", udid)
@@ -1208,7 +1215,7 @@ def py_list_devices():
             info['ConnectionType'] = 'Network'
 
             # Substitute "Network" with "Wifi" in the connection_type
-            connection_type = "Manual Wifi"
+            connection_type = "Tailscale" if tailscale_mode else "Manual Wifi"
             # if connection_type == "Network":
             #     connection_type = "Wifi"
 
